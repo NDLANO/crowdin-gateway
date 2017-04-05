@@ -13,7 +13,7 @@ import scala.util.Properties.envOrNone
 
 
 object CrowdinGatewayProperties {
-  val ApplicationPort = 80
+  val ApplicationPort = propOrElse("APPLICATION_PORT", "80").toInt
   val ContactEmail = "christergundersen@ndla.no"
   val CorrelationIdKey = "correlationID"
   val CorrelationIdHeader = "X-Correlation-ID"
@@ -28,7 +28,7 @@ object CrowdinGatewayProperties {
     val lang = key.toLowerCase
     val details = prop(projectKey).split(";").map(_.trim)
 
-    lang -> ProjectDefinition(details(0), details(1), Language(lang, lang))
+    lang -> ProjectDefinition(details(0), details(1))
   }) toMap
 
 

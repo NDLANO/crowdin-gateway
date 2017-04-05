@@ -7,6 +7,7 @@
 
 package no.ndla.crowdingateway.model
 
+class ContentAlreadyInProgressException(message: String) extends RuntimeException(message)
 class ProjectNotFoundException(message: String) extends RuntimeException(message)
 class ImageNotFoundException(message: String) extends RuntimeException(message)
 class AccessDeniedException(message: String) extends RuntimeException(message)

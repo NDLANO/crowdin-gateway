@@ -7,5 +7,5 @@
 
 package no.ndla.crowdingateway.model.api
 
-
-case class TranslationResponse (id: String)
+case class TranslationFile(id: Int, name: String, numberOfStrings: Int, numberOfWords: Int)
+case class TranslationResponse(translationIds: Seq[Int], translationNames: Seq[String], totalStrings: Int, totalWords: Int)

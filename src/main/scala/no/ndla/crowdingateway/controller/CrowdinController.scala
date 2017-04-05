@@ -7,15 +7,16 @@
 
 package no.ndla.crowdingateway.controller
 
-import no.ndla.crowdingateway.CrowdinGatewayProperties
-import no.ndla.crowdingateway.model.api.{TranslationRequest, TranslationResponse}
-import no.ndla.crowdingateway.service.UploadService
+import no.ndla.crowdingateway.integration.CrowdinClient
+import no.ndla.crowdingateway.model.api.TranslationRequest
+import no.ndla.crowdingateway.service.ConverterService
 import org.json4s.{DefaultFormats, Formats}
-import org.scalatra.Ok
 import org.scalatra.swagger._
 
+import scala.util.{Failure, Success}
+
 trait CrowdinController {
-  this: UploadService =>
+  this: CrowdinClient with ConverterService =>
   val crowdinController: CrowdinController
 
   class CrowdinController(implicit val swagger: Swagger) extends NdlaController with SwaggerSupport {
@@ -27,20 +28,21 @@ trait CrowdinController {
     val response403 = ResponseMessage(403, "Access Denied", Some("Error"))
     val response500 = ResponseMessage(500, "Unknown error", Some("Error"))
 
-    get("/") {
-      CrowdinGatewayProperties.CrowdinProjects.foreach(tuple => println(s"${tuple._1} = ${tuple._2}"))
-      Ok(body = "Heisann")
-    }
-
-    post("/") {
+    post("/article") {
       val translationRequest = extract[TranslationRequest](request.body)
-      for {
-        project <- uploadService.projectForSourceLanguage(translationRequest.fromLanguage)
-        projectWithTargetLanguage <- uploadService.assertHasTargetLanguage(project, translationRequest.toLanguage)
-        uploadResult <- uploadService.upload(projectWithTargetLanguage, translationRequest)
-      } yield uploadResult
+      val directoryName = translationRequest.id
 
-      TranslationResponse("123")
+      val translationResult = for {
+        project <- crowdinClient.getProject(translationRequest.fromLanguage)
+        projectWithLanguage <- crowdinClient.addTargetLanguage(project, translationRequest.toLanguage)
+        directory <- crowdinClient.createDirectory(projectWithLanguage, directoryName)
+        uploaded <- crowdinClient.uploadTo(projectWithLanguage, directory, translationRequest.metaData, translationRequest.content)
+      } yield uploaded
+
+      translationResult match {
+        case Success(x) => converterService.asTranslationResponse(x)
+        case Failure(f) => errorHandler(f)
+      }
     }
   }
 }

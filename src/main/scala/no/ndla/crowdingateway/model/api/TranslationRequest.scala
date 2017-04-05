@@ -8,4 +8,4 @@
 package no.ndla.crowdingateway.model.api
 
 
-case class TranslationRequest (fromLanguage: String, toLanguage: String, metaData: Option[String], content: String, id: String)
+case class TranslationRequest (fromLanguage: String, toLanguage: String, metaData: String, content: String, id: String)

@@ -30,5 +30,6 @@ object Error {
 
   val GenericError = Error(GENERIC, s"Ooops. Something we didn't anticipate occured. We have logged the error, and will look into it. But feel free to contact ${CrowdinGatewayProperties.ContactEmail} if the error persists.")
   val IndexMissingError = Error(INDEX_MISSING, s"Ooops. Our search index is not available at the moment, but we are trying to recreate it. Please try again in a few minutes. Feel free to contact ${CrowdinGatewayProperties.ContactEmail} if the error persists.")
+  val InProgressError = Error(VALIDATION, "The content is already being translated")
 
 }

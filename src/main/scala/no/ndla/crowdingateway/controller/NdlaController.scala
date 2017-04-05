@@ -10,13 +10,13 @@ package no.ndla.crowdingateway.controller
 import com.typesafe.scalalogging.LazyLogging
 import no.ndla.crowdingateway.CrowdinGatewayProperties
 import no.ndla.crowdingateway.model.api.Error
-import no.ndla.crowdingateway.model.{AccessDeniedException, ValidationException, ValidationMessage}
+import no.ndla.crowdingateway.model.{AccessDeniedException, ContentAlreadyInProgressException, ValidationException, ValidationMessage}
 import no.ndla.network.{ApplicationUrl, AuthUser, CorrelationID}
 import org.apache.logging.log4j.ThreadContext
 import org.json4s.native.Serialization.read
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.json.NativeJsonSupport
-import org.scalatra.{InternalServerError, ScalatraServlet}
+import org.scalatra.{BadRequest, InternalServerError, ScalatraServlet}
 
 abstract class NdlaController extends ScalatraServlet with NativeJsonSupport with LazyLogging {
   protected implicit override val jsonFormats: Formats = DefaultFormats
@@ -38,6 +38,7 @@ abstract class NdlaController extends ScalatraServlet with NativeJsonSupport wit
   }
 
   error {
+    case c: ContentAlreadyInProgressException => BadRequest(body = Error.InProgressError)
     case t: Throwable => {
       logger.error(Error.GenericError.toString, t)
       InternalServerError(body=Error.GenericError)
