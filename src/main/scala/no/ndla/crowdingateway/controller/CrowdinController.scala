@@ -8,7 +8,7 @@
 package no.ndla.crowdingateway.controller
 
 import no.ndla.crowdingateway.integration.CrowdinClient
-import no.ndla.crowdingateway.model.api.TranslationRequest
+import no.ndla.crowdingateway.model.api.{Error, TranslationRequest, TranslationResponse}
 import no.ndla.crowdingateway.service.ConverterService
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.swagger._
@@ -28,7 +28,18 @@ trait CrowdinController {
     val response403 = ResponseMessage(403, "Access Denied", Some("Error"))
     val response500 = ResponseMessage(500, "Unknown error", Some("Error"))
 
-    post("/article") {
+
+    val orderArticleTranslation =
+      (apiOperation[TranslationResponse]("orderArticleTranslation")
+        summary "Sends the given content to Crowdin for translation"
+        notes "Sends the given content to Crowdin for translation"
+        parameters(
+        headerParam[Option[String]]("X-Correlation-ID").description("User supplied correlation-id. May be omitted."),
+        bodyParam[TranslationRequest])
+        responseMessages(response403, response500)
+        authorizations "oauth2")
+
+    post("/article", operation(orderArticleTranslation)) {
       val translationRequest = extract[TranslationRequest](request.body)
       val directoryName = translationRequest.id
 
