@@ -10,13 +10,10 @@ import org.scalatra.LifeCycle
  * See LICENSE
  */
 
-
 class ScalatraBootstrap extends LifeCycle {
-
   override def init(context: ServletContext) {
     context.mount(ComponentRegistry.crowdinController, CrowdinGatewayProperties.CrowdinControllerPath, "crowdin")
-    context.mount(ComponentRegistry.resourcesApp, "/api-docs")
+    context.mount(ComponentRegistry.resourcesApp, CrowdinGatewayProperties.ApiDocsPath)
     context.mount(ComponentRegistry.healthController, CrowdinGatewayProperties.HealthControllerPath)
   }
-
 }

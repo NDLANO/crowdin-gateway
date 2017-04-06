@@ -21,6 +21,7 @@ trait CrowdinClient {
   val crowdinClient: CrowdinClient
 
   class CrowdinClient {
+
     private val BASE_URL = "https://api.crowdin.com/api/"
     private val crowdinApi = "https://api.crowdin.com/api"
     private val crowdinProjectInfo = s"$crowdinApi/project/{PROJECT_ID}/info?key={PROJECT_KEY}&json"

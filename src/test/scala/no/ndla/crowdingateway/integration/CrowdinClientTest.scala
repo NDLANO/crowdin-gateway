@@ -34,7 +34,7 @@ class CrowdinClientTest extends UnitSuite with TestEnvironment {
   }
 
   test("That getProject returns Failure when error received from Crowdin") {
-    when(ndlaClient.fetch[CrowdinProject](any[HttpRequest], any[Option[String]], any[Option[String]])(any[Manifest[CrowdinProject]])).thenReturn(Failure(new RuntimeException("Failure from Crowdin")))
+    when(ndlaClient.fetch[CrowdinProject](any[HttpRequest])(any[Manifest[CrowdinProject]])).thenReturn(Failure(new RuntimeException("Failure from Crowdin")))
     assertResult("Failure from Crowdin") {
       client.getProject("nb").failed.get.getMessage
     }
@@ -49,7 +49,7 @@ class CrowdinClientTest extends UnitSuite with TestEnvironment {
     val language = CrowdinLanguage("Norwegian", sourceLanguage, None, None)
 
     val project = CrowdinProject(Seq(), Seq(), CrowdinProjectDetails(language, name, identifier), "")
-    when(ndlaClient.fetch[CrowdinProject](any[HttpRequest], any[Option[String]], any[Option[String]])(any[Manifest[CrowdinProject]])).thenReturn(Success(project))
+    when(ndlaClient.fetch[CrowdinProject](any[HttpRequest])(any[Manifest[CrowdinProject]])).thenReturn(Success(project))
 
     client.getProject(sourceLanguage).map(_.apiKey).get should equal(expectedKey)
   }
@@ -67,14 +67,14 @@ class CrowdinClientTest extends UnitSuite with TestEnvironment {
     val project = CrowdinProject(Seq(), Seq(),
       CrowdinProjectDetails(CrowdinLanguage("Norwegian", "nb", None, None), "test", "test"), "")
 
-    when(ndlaClient.fetch[CrowdinProject](any[HttpRequest], any[Option[String]], any[Option[String]])(any[Manifest[CrowdinProject]])).thenReturn(Failure(new RuntimeException("Failure from Crowdin")))
+    when(ndlaClient.fetch[CrowdinProject](any[HttpRequest])(any[Manifest[CrowdinProject]])).thenReturn(Failure(new RuntimeException("Failure from Crowdin")))
     assertResult("Failure from Crowdin") {
       client.addTargetLanguage(project, "fr").failed.get.getMessage
     }
   }
 
   test("That addTargetLanguage returns Success when all ok") {
-    when(ndlaClient.fetch[EditProjectResponse](any[HttpRequest], any[Option[String]], any[Option[String]])(any[Manifest[EditProjectResponse]])).thenReturn(Success(EditProjectResponse(EditedProject(true, "", ""))))
+    when(ndlaClient.fetch[EditProjectResponse](any[HttpRequest])(any[Manifest[EditProjectResponse]])).thenReturn(Success(EditProjectResponse(EditedProject(true, "", ""))))
     client.addTargetLanguage(DefaultProject, "fr").get should equal (DefaultProject)
   }
 
@@ -87,20 +87,20 @@ class CrowdinClientTest extends UnitSuite with TestEnvironment {
   }
 
   test("That createDirectory returns Failure when error received from Crowdin") {
-    when(ndlaClient.fetch[AddDirectoryResponse](any[HttpRequest], any[Option[String]], any[Option[String]])(any[Manifest[AddDirectoryResponse]])).thenReturn(Failure(new RuntimeException("Failure from Crowdin")))
+    when(ndlaClient.fetch[AddDirectoryResponse](any[HttpRequest])(any[Manifest[AddDirectoryResponse]])).thenReturn(Failure(new RuntimeException("Failure from Crowdin")))
     assertResult("Failure from Crowdin") {
       client.createDirectory(DefaultProject, "directory").failed.get.getMessage
     }
   }
 
   test("That createDirectory returns Success when all ok") {
-    when(ndlaClient.fetch[AddDirectoryResponse](any[HttpRequest], any[Option[String]], any[Option[String]])(any[Manifest[AddDirectoryResponse]])).thenReturn(Success(AddDirectoryResponse(true)))
+    when(ndlaClient.fetch[AddDirectoryResponse](any[HttpRequest])(any[Manifest[AddDirectoryResponse]])).thenReturn(Success(AddDirectoryResponse(true)))
     client.createDirectory(DefaultProject, "directory").get should equal("directory")
 
   }
 
   test("That uploadTo returns Failure when error received from Crowdin") {
-    when(ndlaClient.fetch[AddFileResponse](any[HttpRequest], any[Option[String]], any[Option[String]])(any[Manifest[AddFileResponse]])).thenReturn(Failure(new RuntimeException("Failure from Crowdin")))
+    when(ndlaClient.fetch[AddFileResponse](any[HttpRequest])(any[Manifest[AddFileResponse]])).thenReturn(Failure(new RuntimeException("Failure from Crowdin")))
     assertResult("Failure from Crowdin") {
       client.uploadTo(DefaultProject, "directory", "metadata", "content").failed.get.getMessage
     }
@@ -108,7 +108,7 @@ class CrowdinClientTest extends UnitSuite with TestEnvironment {
 
   test("That uploadTo returns Success when all ok") {
     val stats = AddedStats(Seq())
-    when(ndlaClient.fetch[AddFileResponse](any[HttpRequest], any[Option[String]], any[Option[String]])(any[Manifest[AddFileResponse]])).thenReturn(Success(AddFileResponse(true, stats)))
+    when(ndlaClient.fetch[AddFileResponse](any[HttpRequest])(any[Manifest[AddFileResponse]])).thenReturn(Success(AddFileResponse(true, stats)))
     client.uploadTo(DefaultProject, "director", "metadata", "content") should equal (Success(AddFileResponse(true, stats)))
   }
 }

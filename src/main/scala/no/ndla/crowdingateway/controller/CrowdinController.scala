@@ -40,20 +40,14 @@ trait CrowdinController {
         authorizations "oauth2")
 
     post("/article", operation(orderArticleTranslation)) {
-      val translationRequest = extract[TranslationRequest](request.body)
-      val directoryName = translationRequest.id
-
-      val translationResult = for {
+      for {
+        translationRequest <- extract[TranslationRequest](request.body)
         project <- crowdinClient.getProject(translationRequest.fromLanguage)
         projectWithLanguage <- crowdinClient.addTargetLanguage(project, translationRequest.toLanguage)
-        directory <- crowdinClient.createDirectory(projectWithLanguage, directoryName)
+        directory <- crowdinClient.createDirectory(projectWithLanguage, translationRequest.id)
         uploaded <- crowdinClient.uploadTo(projectWithLanguage, directory, translationRequest.metaData, translationRequest.content)
-      } yield uploaded
-
-      translationResult match {
-        case Success(x) => converterService.asTranslationResponse(x)
-        case Failure(f) => errorHandler(f)
-      }
+        converted <- converterService.asTranslationResponse(uploaded)
+      } yield converted
     }
   }
 }

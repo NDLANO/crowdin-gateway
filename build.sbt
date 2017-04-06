@@ -33,7 +33,7 @@ lazy val crowdin_gateway = (project in file(".")).
     javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
     scalacOptions := Seq("-target:jvm-1.8"),
     libraryDependencies ++= Seq(
-      "ndla" %% "network" % "0.19",
+      "ndla" %% "network" % "0.21-SNAPSHOT", // TODO: Will target 0.21 after PR is approved.
       "com.typesafe.scala-logging" %% "scala-logging" % ScalaLoggingVersion,
       "org.apache.logging.log4j" % "log4j-api" % Log4JVersion,
       "org.apache.logging.log4j" % "log4j-core" % Log4JVersion,
@@ -47,10 +47,6 @@ lazy val crowdin_gateway = (project in file(".")).
       "org.eclipse.jetty" % "jetty-webapp" % Jettyversion % "container;compile",
       "org.eclipse.jetty" % "jetty-plus" % Jettyversion % "container",
       "org.json4s"   %% "json4s-native" % "3.5.0",
-      "org.scalikejdbc" %% "scalikejdbc" % "2.5.0",
-      "org.postgresql" % "postgresql" % "9.4-1201-jdbc4",
-      "org.flywaydb" % "flyway-core" % "4.0",
-      "com.netaporter" %% "scala-uri" % "0.4.16",
       "org.scalatest" %% "scalatest" % ScalaTestVersion % "test",
       "org.mockito" % "mockito-all" % MockitoVersion % "test"
     )
