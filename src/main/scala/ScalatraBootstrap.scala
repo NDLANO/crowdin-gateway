@@ -13,6 +13,7 @@ import org.scalatra.LifeCycle
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
     context.mount(ComponentRegistry.crowdinController, CrowdinGatewayProperties.CrowdinControllerPath, "crowdin")
+    context.mount(ComponentRegistry.crowdinCallbackController, CrowdinGatewayProperties.CrowdinCallbackPath, "crowdin-callback")
     context.mount(ComponentRegistry.resourcesApp, CrowdinGatewayProperties.ApiDocsPath)
     context.mount(ComponentRegistry.healthController, CrowdinGatewayProperties.HealthControllerPath)
   }

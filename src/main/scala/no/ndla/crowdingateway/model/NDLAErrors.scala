@@ -13,6 +13,7 @@ class ContentAlreadyInProgressException(message: String) extends RuntimeExceptio
 class ProjectNotFoundException(message: String) extends RuntimeException(message)
 class ImageNotFoundException(message: String) extends RuntimeException(message)
 class AccessDeniedException(message: String) extends RuntimeException(message)
+class ParameterMissingException(message: String) extends RuntimeException(message)
 class ValidationException(message: String = "Validation error", val errors: Seq[ValidationMessage]) extends RuntimeException(message)
 
 
