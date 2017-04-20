@@ -17,13 +17,12 @@ trait ConverterService {
   val converterService: ConverterService
 
   class ConverterService {
-    def asTranslationResponse(x: AddFileResponse): Try[TranslationResponse] = {
-      Success(
-        TranslationResponse(
+    def asTranslationResponse(x: AddFileResponse): TranslationResponse = {
+      TranslationResponse(
         x.stats.files.map(_.fileId),
         x.stats.files.map(_.name),
         x.stats.files.map(_.words).sum,
-        x.stats.files.map(_.strings).sum))
+        x.stats.files.map(_.strings).sum)
     }
   }
 }
