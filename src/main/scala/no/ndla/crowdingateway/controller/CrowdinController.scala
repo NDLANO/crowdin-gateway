@@ -46,7 +46,7 @@ trait CrowdinController {
         projectWithLanguage <- crowdinClient.addTargetLanguage(project, translationRequest.toLanguage)
         directory <- crowdinClient.createDirectory(projectWithLanguage, translationRequest.id)
         uploaded <- crowdinClient.uploadTo(projectWithLanguage, directory, translationRequest.metaData, translationRequest.content)
-        converted <- converterService.asTranslationResponse(uploaded)
+        converted <- Success(converterService.asTranslationResponse(uploaded))
       } yield converted
     }
   }
