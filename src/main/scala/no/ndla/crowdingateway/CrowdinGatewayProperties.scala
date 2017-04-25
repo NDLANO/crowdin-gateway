@@ -19,7 +19,7 @@ object CrowdinGatewayProperties {
   val CorrelationIdHeader = "X-Correlation-ID"
   val HealthControllerPath = "/health"
   val CrowdinControllerPath = "/crowdin-gateway/v1/crowdin"
-  val ApiDocsPath = "/api-docs"
+  val ApiDocsPath = "/crowdin-gateway/api-docs"
 
 
   private val projectList = propOrElse("CROWDIN_PROJECTS", "").split(",").map(_.trim)
