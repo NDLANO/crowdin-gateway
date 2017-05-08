@@ -17,3 +17,4 @@ For a more detailed documentation of the API, please refer to the [API documenta
 **Run tests:** sbt test
 
 **Create Docker Image:**./build.sh
+
