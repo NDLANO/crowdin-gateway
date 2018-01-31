@@ -1,3 +1,5 @@
+**_DEPRECATED_**
+
 # Crowdin Gateway
 
 ## Usage
